@@ -22,7 +22,7 @@ class User {
         });
     }
 
-    static create(request: any, callback: (error: Error | null) => void) {
+    static create(request: any, callback: (error: Error | null) => void) { //TODO: change from any to user when learn how to parse object into type
         const user: User = {
             id: request.id,
             email: request.email,
