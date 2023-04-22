@@ -2,26 +2,39 @@ import connection from '../dbconfig';
 
 class User {
     id: number;
-    firstName: string;
-    lastName: string;
     email: string;
+    password: string;
 
-    constructor(id: number, firstName: string, lastName: string, email: string) {
+    constructor(id: number, email: string, password: string) {
         this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
         this.email = email;
+        this.password = password;
     }
 
-    static findAll(callback: (error: Error | null, users?: User[]) => void) {
+    static getAll(callback: (error: Error | null, users?: User[]) => void) {
         connection.query('SELECT * FROM users', (error, results) => {
             if (error) {
                 callback(error);
             } else {
-                const users = results.map((result: any) => new User(result.id, result.firstName, result.lastName, result.email));
+                const users = results.map((result: any) => new User(result.id, result.email, result.password));
                 callback(null, users);
             }
         });
+    }
+
+    static create(request: any, callback: (error: Error | null) => void) {
+        const user: User = {
+            id: request.id,
+            email: request.email,
+            password: request.password
+        }
+        connection.query(`INSERT INTO users (id, email, password) VALUES ('${request.id}', '${request.email}', '${request.password}')`, (error) => {
+            if (error) {
+                callback(error)
+            } else {
+                callback(null)
+            }
+        })
     }
 }
 
