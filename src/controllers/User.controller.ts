@@ -13,16 +13,21 @@ class UserController {
   }
   static async create(req: Request, res: Response) {
     const request = JSON.stringify(req.body);
-    console.log("Request: ", request);
     User.create(request, (error) => {
       if (error && error?.message === "Passwords do not match") {
         res.sendStatus(401);
       } else if (error) {
         res.sendStatus(500).json({ error });
       } else {
-        res.sendStatus(200);
+        res.sendStatus(201);
       }
     });
+  }
+  static async signIn(req: Request, res: Response) {
+    const request = JSON.stringify(req.body);
+    User.signIn(request, (error) => {
+      //...
+    })
   }
 }
 

@@ -62,6 +62,30 @@ class User {
       callback(error as Error);
     }
   }
+
+  static signIn(request: any, callback: (error: Error | User) => void) {
+    try {
+      const requestAsJSON = JSON.parse(request);
+      connection.query(
+        `SELECT * FROM users WHERE email=${requestAsJSON.email}`,
+        (error, results) => {
+          if (error) {
+            callback(error);
+          } else {
+            const user: User = {
+              id: results[0].id,
+              email: results[0].email,
+              password: results[0].password,
+            };
+            callback(user);
+          }
+        }
+      );
+    } catch (error) {
+      console.log("Error: ", error);
+      callback(error as Error);
+    }
+  }
 }
 
 export default User;
