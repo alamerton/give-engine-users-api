@@ -25,8 +25,7 @@ class UserController {
   }
   static async signIn(req: Request, res: Response) {
     const request = JSON.stringify(req.body);
-    User.signIn(request, (error) => {
-      //...
+    User.signIn(request, (error, results) => {
     })
   }
 }

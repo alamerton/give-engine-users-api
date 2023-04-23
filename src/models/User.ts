@@ -77,7 +77,9 @@ class User {
               email: results[0].email,
               password: results[0].password,
             };
-            callback(user);
+            requestAsJSON.password === user.password
+              ? callback(user)
+              : callback(new Error("Passwords do not match"));
           }
         }
       );
