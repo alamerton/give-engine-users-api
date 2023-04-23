@@ -24,16 +24,14 @@ class User {
     });
   }
 
-  static create(request: any, callback: (error: Error | null) => void) {
-    //TODO: change from any to user when learn how to parse object into type
-    // maybe I could check that it's type safe on the React app as well
+  static create(req: any, callback: (error: Error | null) => void) {
     try {
-      const requestObject = JSON.parse(request)
+      const request = JSON.parse(req);
       const user: User = {
         id: 23434,
-        email: requestObject.email,
-        password: requestObject.password
-      }
+        email: request.email,
+        password: request.password,
+      };
       console.log("REQUEST over here: ", request);
       connection.query(
         `INSERT INTO users (id, email, password) VALUES ('${user.id}', '${user.email}', '${request.password}')`,
@@ -45,13 +43,14 @@ class User {
           }
         }
       );
-    } catch (err) {
+    } catch (error) {
       console.log(
         "Object: ",
-        request,
+        req,
         " Cannot be mapped onto User type. Error: ",
-        err
+        error
       );
+      callback(error as Error);
     }
   }
 }
