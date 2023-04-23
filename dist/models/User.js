@@ -11,6 +11,9 @@ class User {
         this.email = email;
         this.password = password;
     }
+    static checkPassword(password, confirmPassword) {
+        return password === confirmPassword ? true : false;
+    }
     static getAll(callback) {
         dbconfig_1.default.query("SELECT * FROM users", (error, results) => {
             if (error) {
@@ -25,23 +28,30 @@ class User {
     static create(request, callback) {
         try {
             const requestAsJSON = JSON.parse(request);
-            const userID = (0, uuid_1.v4)();
-            const user = {
-                id: userID,
-                email: requestAsJSON.email,
-                password: requestAsJSON.password,
-            };
-            dbconfig_1.default.query(`INSERT INTO users (id, email, password) VALUES ('${user.id}', '${user.email}', '${user.password}')`, (error) => {
-                if (error) {
-                    callback(error);
-                }
-                else {
-                    callback(null);
-                }
-            });
+            const passwordsMatch = this.checkPassword(requestAsJSON.password, requestAsJSON.confirmPassword);
+            if (passwordsMatch) {
+                const userID = (0, uuid_1.v4)();
+                const user = {
+                    id: userID,
+                    email: requestAsJSON.email,
+                    password: requestAsJSON.password,
+                };
+                dbconfig_1.default.query(`INSERT INTO users (id, email, password) VALUES ('${user.id}', '${user.email}', '${user.password}')`, (error) => {
+                    if (error) {
+                        callback(error);
+                    }
+                    else {
+                        callback(null);
+                    }
+                });
+            }
+            else {
+                const passwordError = new Error("Passwords do not match");
+                callback(passwordError);
+            }
         }
         catch (error) {
-            console.log("Object: ", request, " Cannot be mapped onto User type. Error: ", error);
+            console.log("Error: ", error);
             callback(error);
         }
     }

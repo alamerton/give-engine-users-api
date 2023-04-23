@@ -15,8 +15,10 @@ class UserController {
     const request = JSON.stringify(req.body);
     console.log("Request: ", request);
     User.create(request, (error) => {
-      if (error) {
-        res.status(500).json({ error });
+      if (error && error?.message === "Passwords do not match") {
+        res.sendStatus(401);
+      } else if (error) {
+        res.sendStatus(500).json({ error });
       } else {
         res.sendStatus(200);
       }

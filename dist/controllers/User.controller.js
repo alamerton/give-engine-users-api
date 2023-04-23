@@ -16,7 +16,6 @@ const User_1 = __importDefault(require("../models/User"));
 class UserController {
     static getAll(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            // Error is handled here and not at the model level. Why?
             User_1.default.getAll((error, users) => {
                 if (error) {
                     res.status(500).json({ error });
@@ -32,11 +31,13 @@ class UserController {
             const request = JSON.stringify(req.body);
             console.log("Request: ", request);
             User_1.default.create(request, (error) => {
-                if (error) {
-                    res.status(500).json({ error });
+                if (error && (error === null || error === void 0 ? void 0 : error.message) === "Passwords do not match") {
+                    res.sendStatus(401);
+                }
+                else if (error) {
+                    res.sendStatus(500).json({ error });
                 }
                 else {
-                    console.log("responding");
                     res.sendStatus(200);
                 }
             });
