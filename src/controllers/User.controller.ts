@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import User from "../models/User";
+import { json } from "body-parser";
 
 class UserController {
   static async getAll(req: Request, res: Response) {
@@ -13,9 +14,9 @@ class UserController {
     });
   }
   static async create(req: Request, res: Response) {
-    const request = JSON.parse(req.body)
-    console.log(request)
-    User.create(req, (error) => {
+    const request = JSON.stringify(req.body);
+    console.log("Request: ", request);
+    const attempt = User.create(request, (error) => {
       if (error) {
         res.status(500).json({ error });
       } else {

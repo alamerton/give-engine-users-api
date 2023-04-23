@@ -29,9 +29,9 @@ class UserController {
     }
     static create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const request = JSON.parse(req.body);
-            console.log(request);
-            User_1.default.create(req, (error) => {
+            const request = JSON.stringify(req.body);
+            console.log("Request: ", request);
+            User_1.default.create(request, (error) => {
                 if (error) {
                     res.status(500).json({ error });
                 }

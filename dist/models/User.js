@@ -11,7 +11,7 @@ class User {
         this.password = password;
     }
     static getAll(callback) {
-        dbconfig_1.default.query('SELECT * FROM users', (error, results) => {
+        dbconfig_1.default.query("SELECT * FROM users", (error, results) => {
             if (error) {
                 callback(error);
             }
@@ -22,19 +22,22 @@ class User {
         });
     }
     static create(request, callback) {
-        const user = {
-            id: request.id,
-            email: request.email,
-            password: request.password
-        };
-        dbconfig_1.default.query(`INSERT INTO users (id, email, password) VALUES ('${request.id}', '${request.email}', '${request.password}')`, (error) => {
-            if (error) {
-                callback(error);
-            }
-            else {
-                callback(null);
-            }
-        });
+        //TODO: change from any to user when learn how to parse object into type
+        // maybe I could check that it's type safe on the React app as well
+        try {
+            const user = JSON.parse(request);
+            dbconfig_1.default.query(`INSERT INTO users (id, email, password) VALUES ('${user.id}', '${user.email}', '${request.password}')`, (error) => {
+                if (error) {
+                    callback(error);
+                }
+                else {
+                    callback(null);
+                }
+            });
+        }
+        catch (err) {
+            console.log("Object: ", request, " Cannot be mapped onto User type. Error: ", err);
+        }
     }
 }
 exports.default = User;
