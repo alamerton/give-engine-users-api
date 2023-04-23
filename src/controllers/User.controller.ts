@@ -5,7 +5,6 @@ import { log } from "console";
 
 class UserController {
   static async getAll(req: Request, res: Response) {
-    // Error is handled here and not at the model level. Why?
     User.getAll((error, users) => {
       if (error) {
         res.status(500).json({ error });
