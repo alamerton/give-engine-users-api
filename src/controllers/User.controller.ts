@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import User from "../models/User";
 import { json } from "body-parser";
+import { log } from "console";
 
 class UserController {
   static async getAll(req: Request, res: Response) {
@@ -16,11 +17,11 @@ class UserController {
   static async create(req: Request, res: Response) {
     const request = JSON.stringify(req.body);
     console.log("Request: ", request);
-    const attempt = User.create(request, (error) => {
+    User.create(request, (error) => {
       if (error) {
         res.status(500).json({ error });
       } else {
-        res.status(200);
+        res.sendStatus(200);
       }
     });
   }

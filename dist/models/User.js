@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const dbconfig_1 = __importDefault(require("../dbconfig"));
+const uuid_1 = require("uuid");
 class User {
     constructor(id, email, password) {
         this.id = id;
@@ -22,11 +23,15 @@ class User {
         });
     }
     static create(request, callback) {
-        //TODO: change from any to user when learn how to parse object into type
-        // maybe I could check that it's type safe on the React app as well
         try {
-            const user = JSON.parse(request);
-            dbconfig_1.default.query(`INSERT INTO users (id, email, password) VALUES ('${user.id}', '${user.email}', '${request.password}')`, (error) => {
+            const requestAsJSON = JSON.parse(request);
+            const userID = (0, uuid_1.v4)();
+            const user = {
+                id: userID,
+                email: requestAsJSON.email,
+                password: requestAsJSON.password,
+            };
+            dbconfig_1.default.query(`INSERT INTO users (id, email, password) VALUES ('${user.id}', '${user.email}', '${user.password}')`, (error) => {
                 if (error) {
                     callback(error);
                 }
@@ -35,8 +40,9 @@ class User {
                 }
             });
         }
-        catch (err) {
-            console.log("Object: ", request, " Cannot be mapped onto User type. Error: ", err);
+        catch (error) {
+            console.log("Object: ", request, " Cannot be mapped onto User type. Error: ", error);
+            callback(error);
         }
     }
 }

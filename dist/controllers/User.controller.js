@@ -36,7 +36,8 @@ class UserController {
                     res.status(500).json({ error });
                 }
                 else {
-                    res.status(200);
+                    console.log("responding");
+                    res.sendStatus(200);
                 }
             });
         });
