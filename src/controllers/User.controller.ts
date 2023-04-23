@@ -1,7 +1,5 @@
 import { Request, Response } from "express";
 import User from "../models/User";
-import { json } from "body-parser";
-import { log } from "console";
 
 class UserController {
   static async getAll(req: Request, res: Response) {
