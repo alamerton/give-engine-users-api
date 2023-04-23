@@ -63,29 +63,36 @@ class User {
     }
   }
 
-  static signIn(request: any, callback: (error: Error | User) => void) {
+  static signIn(
+    request: any,
+    callback: (error: Error | null, response: User | null) => void
+  ) {
     try {
       const requestAsJSON = JSON.parse(request);
       connection.query(
         `SELECT * FROM users WHERE email=${requestAsJSON.email}`,
         (error, results) => {
           if (error) {
-            callback(error);
+            callback(error, null);
           } else {
             const user: User = {
               id: results[0].id,
               email: results[0].email,
               password: results[0].password,
             };
-            requestAsJSON.password === user.password
-              ? callback(user)
-              : callback(new Error("Passwords do not match"));
+            const passwordsMatch = this.checkPassword(
+              requestAsJSON.password,
+              user.password
+            );
+            passwordsMatch
+              ? callback(null, user)
+              : callback(new Error("Passwords do not match"), null);
           }
         }
       );
     } catch (error) {
       console.log("Error: ", error);
-      callback(error as Error);
+      callback(error as Error, null);
     }
   }
 }

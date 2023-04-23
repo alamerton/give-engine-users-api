@@ -25,7 +25,8 @@ class UserController {
   }
   static async signIn(req: Request, res: Response) {
     const request = JSON.stringify(req.body);
-    User.signIn(request, (error, results) => {
+    User.signIn(request, (error, response) => {
+      if (error && error?.message === "Passwords do not match") // TODO: make function to remove duplicate
     })
   }
 }
