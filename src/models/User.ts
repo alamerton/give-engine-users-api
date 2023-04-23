@@ -1,11 +1,12 @@
 import connection from "../dbconfig";
+import { v4 as uuid } from "uuid";
 
 class User {
-  id: number;
+  id: string;
   email: string;
   password: string;
 
-  constructor(id: number, email: string, password: string) {
+  constructor(id: string, email: string, password: string) {
     this.id = id;
     this.email = email;
     this.password = password;
@@ -24,17 +25,17 @@ class User {
     });
   }
 
-  static create(req: any, callback: (error: Error | null) => void) {
+  static create(request: any, callback: (error: Error | null) => void) {
     try {
-      const request = JSON.parse(req);
+      const requestAsJSON = JSON.parse(request);
+      const userID: string = uuid();
       const user: User = {
-        id: 23434,
-        email: request.email,
-        password: request.password,
+        id: userID,
+        email: requestAsJSON.email,
+        password: requestAsJSON.password,
       };
-      console.log("REQUEST over here: ", request);
       connection.query(
-        `INSERT INTO users (id, email, password) VALUES ('${user.id}', '${user.email}', '${request.password}')`,
+        `INSERT INTO users (id, email, password) VALUES ('${user.id}', '${user.email}', '${user.password}')`,
         (error) => {
           if (error) {
             callback(error);
@@ -46,7 +47,7 @@ class User {
     } catch (error) {
       console.log(
         "Object: ",
-        req,
+        request,
         " Cannot be mapped onto User type. Error: ",
         error
       );
