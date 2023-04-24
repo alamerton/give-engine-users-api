@@ -29,9 +29,25 @@ class UserController {
     static create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const request = JSON.stringify(req.body);
-            console.log("Request: ", request);
             User_1.default.create(request, (error) => {
                 if (error && (error === null || error === void 0 ? void 0 : error.message) === "Passwords do not match") {
+                    res.sendStatus(401);
+                }
+                else if (error) {
+                    res.sendStatus(500).json({ error });
+                }
+                else {
+                    res.sendStatus(201);
+                }
+            });
+        });
+    }
+    static signIn(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const request = JSON.stringify(req.body);
+            User_1.default.signIn(request, (error) => {
+                if (error && (error === null || error === void 0 ? void 0 : error.message) === "Incorrect password") {
+                    // TODO: make function to remove duplicate
                     res.sendStatus(401);
                 }
                 else if (error) {
