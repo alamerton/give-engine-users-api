@@ -25,6 +25,17 @@ class User {
             }
         });
     }
+    static get(callback) {
+        dbconfig_1.default.query("SELECT FROM users WHERE ", (error, results) => {
+            if (error) {
+                callback(error);
+            }
+            else {
+                const users = results.map((result) => new User(result.id, result.email, result.password));
+                callback(null, users);
+            }
+        });
+    }
     static create(request, callback) {
         const requestAsJSON = JSON.parse(request);
         const passwordsMatch = this.checkPassword(requestAsJSON.password, requestAsJSON.confirmPassword);
@@ -37,16 +48,16 @@ class User {
             };
             dbconfig_1.default.query(`INSERT INTO users (id, email, password) VALUES ('${user.id}', '${user.email}', '${user.password}')`, (error) => {
                 if (error) {
-                    callback(error);
+                    callback(error, null);
                 }
                 else {
-                    callback(null);
+                    callback(null, userID);
                 }
             });
         }
         else {
             const passwordError = new Error("Passwords do not match");
-            callback(passwordError);
+            callback(passwordError, null);
         }
     }
     static signIn(request, callback) {

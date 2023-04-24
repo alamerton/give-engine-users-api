@@ -24,11 +24,11 @@ class UserController {
     const request = JSON.stringify(req.body);
     User.create(request, (error, id) => {
       if (error && error?.message === "Passwords do not match") {
-        res.sendStatus(401);
+        res.status(401);
       } else if (error) {
-        res.sendStatus(500).json({ error });
+        res.status(500).json({ error });
       } else {
-        res.sendStatus(201).json({ id });
+        res.status(201).json({ id });
       }
     });
   }
@@ -37,11 +37,11 @@ class UserController {
     User.signIn(request, (error) => {
       if (error && error?.message === "Incorrect password") {
         // TODO: make function to remove duplicate
-        res.sendStatus(401);
+        res.status(401);
       } else if (error) {
-        res.sendStatus(500).json({ error });
+        res.status(500).json({ error });
       } else {
-        res.sendStatus(201);
+        res.status(201);
       }
     });
   }

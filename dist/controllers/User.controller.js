@@ -26,18 +26,27 @@ class UserController {
             });
         });
     }
+    // static async get(req: Request, res: Response) {
+    //   User.get((error, user) => {
+    //     if (error) {
+    //       res.status(500).json({ error });
+    //     } else {
+    //       res.json({ user });
+    //     }
+    //   });
+    // }
     static create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const request = JSON.stringify(req.body);
-            User_1.default.create(request, (error) => {
+            User_1.default.create(request, (error, id) => {
                 if (error && (error === null || error === void 0 ? void 0 : error.message) === "Passwords do not match") {
-                    res.sendStatus(401);
+                    res.status(401);
                 }
                 else if (error) {
-                    res.sendStatus(500).json({ error });
+                    res.status(500).json({ error });
                 }
                 else {
-                    res.sendStatus(201);
+                    res.status(201).json({ id });
                 }
             });
         });
@@ -48,13 +57,13 @@ class UserController {
             User_1.default.signIn(request, (error) => {
                 if (error && (error === null || error === void 0 ? void 0 : error.message) === "Incorrect password") {
                     // TODO: make function to remove duplicate
-                    res.sendStatus(401);
+                    res.status(401);
                 }
                 else if (error) {
-                    res.sendStatus(500).json({ error });
+                    res.status(500).json({ error });
                 }
                 else {
-                    res.sendStatus(201);
+                    res.status(201);
                 }
             });
         });
