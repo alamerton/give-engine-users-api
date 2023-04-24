@@ -26,60 +26,47 @@ class User {
         });
     }
     static create(request, callback) {
-        try {
-            const requestAsJSON = JSON.parse(request);
-            const passwordsMatch = this.checkPassword(requestAsJSON.password, requestAsJSON.confirmPassword);
-            if (passwordsMatch) {
-                const userID = (0, uuid_1.v4)();
-                const user = {
-                    id: userID,
-                    email: requestAsJSON.email,
-                    password: requestAsJSON.password,
-                };
-                dbconfig_1.default.query(`INSERT INTO users (id, email, password) VALUES ('${user.id}', '${user.email}', '${user.password}')`, (error) => {
-                    if (error) {
-                        callback(error);
-                    }
-                    else {
-                        callback(null);
-                    }
-                });
-            }
-            else {
-                const passwordError = new Error("Passwords do not match");
-                callback(passwordError);
-            }
-        }
-        catch (error) {
-            console.log("Error: ", error);
-            callback(error);
-        }
-    }
-    static signIn(request, callback) {
-        try {
-            const requestAsJSON = JSON.parse(request);
-            dbconfig_1.default.query(`SELECT * FROM users WHERE email=${requestAsJSON.email}`, (error, results) => {
+        const requestAsJSON = JSON.parse(request);
+        const passwordsMatch = this.checkPassword(requestAsJSON.password, requestAsJSON.confirmPassword);
+        if (passwordsMatch) {
+            const userID = (0, uuid_1.v4)();
+            const user = {
+                id: userID,
+                email: requestAsJSON.email,
+                password: requestAsJSON.password,
+            };
+            dbconfig_1.default.query(`INSERT INTO users (id, email, password) VALUES ('${user.id}', '${user.email}', '${user.password}')`, (error) => {
                 if (error) {
                     callback(error);
                 }
                 else {
-                    const user = {
-                        id: results[0].id,
-                        email: results[0].email,
-                        password: results[0].password,
-                    };
-                    console.log("user: ", user);
-                    const passwordsMatch = this.checkPassword(requestAsJSON.password, user.password);
-                    passwordsMatch
-                        ? callback(null)
-                        : callback(new Error("Passwords do not match"));
+                    callback(null);
                 }
             });
         }
-        catch (error) {
-            console.log("Error: ", error);
-            callback(error);
+        else {
+            const passwordError = new Error("Passwords do not match");
+            callback(passwordError);
         }
+    }
+    static signIn(request, callback) {
+        const requestAsJSON = JSON.parse(request);
+        dbconfig_1.default.query(`SELECT * FROM users WHERE email=${requestAsJSON.email}`, (error, results) => {
+            if (error) {
+                callback(error);
+            }
+            else {
+                const user = {
+                    id: results[0].id,
+                    email: results[0].email,
+                    password: results[0].password,
+                };
+                const passwordsMatch = this.checkPassword(requestAsJSON.password, user.password);
+                passwordsMatch
+                    ? callback(null)
+                    : callback(new Error("Passwords do not match"));
+            }
+        });
     }
 }
 exports.default = User;
