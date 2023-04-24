@@ -22,13 +22,13 @@ class UserController {
   // }
   static async create(req: Request, res: Response) {
     const request = JSON.stringify(req.body);
-    User.create(request, (error) => {
+    User.create(request, (error, id) => {
       if (error && error?.message === "Passwords do not match") {
         res.sendStatus(401);
       } else if (error) {
         res.sendStatus(500).json({ error });
       } else {
-        res.sendStatus(201).json({user.});
+        res.sendStatus(201).json({ id });
       }
     });
   }
