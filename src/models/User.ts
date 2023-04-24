@@ -29,7 +29,20 @@ class User {
     });
   }
 
-  static create(request: any, callback: (error: Error | null) => void) {
+  static get(callback: (error: Error | null, user?: User) => void) {
+    connection.query("SELECT FROM users WHERE ", (error, results) => {
+      if (error) {
+        callback(error);
+      } else {
+        const users = results.map(
+          (result: any) => new User(result.id, result.email, result.password)
+        );
+        callback(null, users);
+      }
+    });
+  }
+
+  static create(request: any, callback: (error: Error | null, id: string | null) => void) {
     const requestAsJSON = JSON.parse(request);
     const passwordsMatch = this.checkPassword(
       requestAsJSON.password,
@@ -46,15 +59,15 @@ class User {
         `INSERT INTO users (id, email, password) VALUES ('${user.id}', '${user.email}', '${user.password}')`,
         (error) => {
           if (error) {
-            callback(error);
+            callback(error, null);
           } else {
-            callback(null);
+            callback(null, userID);
           }
         }
       );
     } else {
       const passwordError = new Error("Passwords do not match");
-      callback(passwordError);
+      callback(passwordError, null);
     }
   }
 

@@ -11,6 +11,15 @@ class UserController {
       }
     });
   }
+  // static async get(req: Request, res: Response) {
+  //   User.get((error, user) => {
+  //     if (error) {
+  //       res.status(500).json({ error });
+  //     } else {
+  //       res.json({ user });
+  //     }
+  //   });
+  // }
   static async create(req: Request, res: Response) {
     const request = JSON.stringify(req.body);
     User.create(request, (error) => {
@@ -19,7 +28,7 @@ class UserController {
       } else if (error) {
         res.sendStatus(500).json({ error });
       } else {
-        res.sendStatus(201);
+        res.sendStatus(201).json({user.});
       }
     });
   }
