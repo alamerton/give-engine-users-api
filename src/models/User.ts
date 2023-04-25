@@ -71,13 +71,13 @@ class User {
     }
   }
 
-  static signIn(request: any, callback: (error: Error | null) => void) {
+  static signIn(request: any, callback: (error: Error | null, id: string | null) => void) {
     const requestAsJSON = JSON.parse(request);
     connection.query(
       `SELECT * FROM users WHERE email=${requestAsJSON.email}`,
       (error, results) => {
         if (error) {
-          callback(error);
+          callback(error, null);
         } else {
           const user: User = {
             id: results[0].id,
@@ -89,8 +89,8 @@ class User {
             user.password
           );
           passwordsMatch
-            ? callback(null)
-            : callback(new Error("Passwords do not match"));
+            ? callback(null, user.id)
+            : callback(new Error("Passwords do not match"), null);
         }
       }
     );
