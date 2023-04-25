@@ -58,9 +58,8 @@ class UserController {
                 if (error && (error === null || error === void 0 ? void 0 : error.message) === "Incorrect password") {
                     res.status(401);
                 }
-                else if (error !== null) {
-                    //  don't do if error is null alt: if(error !== null) because it might be returning true when error is null because it's not undefined
-                    res.status(500).json({ error }); // TODO: remove id if obsolete and return null instead
+                else if (error !== null) { //TODO: !!error?
+                    res.status(500).json({ error });
                 }
                 else {
                     res.status(201).json({ id });

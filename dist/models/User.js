@@ -62,10 +62,8 @@ class User {
     }
     static signIn(request, callback) {
         const requestAsJSON = JSON.parse(request);
-        console.log("Here's the user JSON object: ", requestAsJSON);
         dbconfig_1.default.query(`SELECT * FROM users WHERE email='${requestAsJSON.email}'`, (error, results) => {
             if (error) {
-                console.log("ERROR HAPPENING", error);
                 callback(error, null);
             }
             else {
