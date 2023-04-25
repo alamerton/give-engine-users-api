@@ -42,7 +42,10 @@ class User {
     });
   }
 
-  static create(request: any, callback: (error: Error | null, id: string | null) => void) {
+  static create(
+    request: any,
+    callback: (error: Error | null, id: string | null) => void
+  ) {
     const requestAsJSON = JSON.parse(request);
     const passwordsMatch = this.checkPassword(
       requestAsJSON.password,
@@ -71,10 +74,13 @@ class User {
     }
   }
 
-  static signIn(request: any, callback: (error: Error | null, id: string | null) => void) {
+  static signIn(
+    request: any,
+    callback: (error: Error | null, id: string | null) => void
+  ) {
     const requestAsJSON = JSON.parse(request);
     connection.query(
-      `SELECT * FROM users WHERE email=${requestAsJSON.email}`,
+      `SELECT * FROM users WHERE email='${requestAsJSON.email}'`,
       (error, results) => {
         if (error) {
           callback(error, null);

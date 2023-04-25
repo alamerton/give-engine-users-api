@@ -54,16 +54,16 @@ class UserController {
     static signIn(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const request = JSON.stringify(req.body);
-            User_1.default.signIn(request, (error) => {
+            User_1.default.signIn(request, (error, id) => {
                 if (error && (error === null || error === void 0 ? void 0 : error.message) === "Incorrect password") {
-                    // TODO: make function to remove duplicate
                     res.status(401);
                 }
-                else if (error) {
-                    res.status(500).json({ error });
+                else if (error !== null) {
+                    //  don't do if error is null alt: if(error !== null) because it might be returning true when error is null because it's not undefined
+                    res.status(500).json({ error }); // TODO: remove id if obsolete and return null instead
                 }
                 else {
-                    res.status(201);
+                    res.status(201).json({ id });
                 }
             });
         });
