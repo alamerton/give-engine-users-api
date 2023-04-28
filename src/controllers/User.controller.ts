@@ -28,7 +28,7 @@ class UserController {
     User.signIn(request, (error, id) => {
       if (error && error?.message === "Incorrect password") {
         res.status(401);
-      } else if (error !== null) { //TODO: !!error?
+      } else if (!!error) {
         res.status(500).json({ error });
       } else {
         res.status(201).json({ id });
