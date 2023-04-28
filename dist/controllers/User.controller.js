@@ -49,7 +49,7 @@ class UserController {
                 if (error && (error === null || error === void 0 ? void 0 : error.message) === "Incorrect password") {
                     res.status(401);
                 }
-                else if (error !== null) { //TODO: !!error?
+                else if (error) {
                     res.status(500).json({ error });
                 }
                 else {
