@@ -26,15 +26,6 @@ class UserController {
             });
         });
     }
-    // static async get(req: Request, res: Response) {
-    //   User.get((error, user) => {
-    //     if (error) {
-    //       res.status(500).json({ error });
-    //     } else {
-    //       res.json({ user });
-    //     }
-    //   });
-    // }
     static create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const request = JSON.stringify(req.body);
