@@ -3,13 +3,15 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import userRoutes from "./routes/User.route";
 
-const app = express();
-app.use(cors());
-app.use(bodyParser.json());
-app.use("/", userRoutes);
+const server = express();
+server.use(cors());
+server.use(bodyParser.json());
+server.use("/", userRoutes);
 
 const port = 5001;
 
-app.listen(port, () => {
+server.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 });
+
+export default server;
